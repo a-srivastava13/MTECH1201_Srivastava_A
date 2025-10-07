@@ -11,10 +11,12 @@ let r8 = 0
 let r9 = 0
 let d = 150;
 let xV = 2, yV = 1;
+s = 0
 
 
 function setup() {
-  createCanvas(800, 800);
+  createCanvas(windowWidth, windowHeight);
+  background(0)
   col1 = color('#f5bb27');
   col2 = color('#7d746f');
   col3 = color('#f74fec');
@@ -25,53 +27,64 @@ function setup() {
   col8 = color('#7adafa');
   col9 = color('#252b78');
   col10 = color('#79798a');
+  angleMode (DEGREES)
+  ellipseMode(CENTER)
+  
 
   noStroke();
 }
 
 function draw() {
-  background(0);
-  let i = map(x, 0, width,0,1);
-  let j = map(y,0,height,0,1);
+  background(0);  
 
+  
+   var galaxy = {
+    locationX : random(width),
+    locationY : random(height),
+    size : random(1,6)
+  }
+  // if (s <= 600){
+  fill(255)
+  ellipse(galaxy.locationX, galaxy.locationY, galaxy.size, galaxy.size)
+  //   s += 1
+  // }
+
+
+ 
  fill(col1)
   ellipse(windowWidth/2, windowHeight/2,d)
 
-  //push()
+  push();
+    translate(windowWidth/2, windowHeight/2)
+    
   
-  //rotate(r);
-  // translate((25), (10));
+  rotate(r);
+   
     fill(col2);
-    ellipse(400,475, 25)
- // pop();
-
-  //push()
-  
-  //rotate(r2);
-  // translate((25), (10));
+    ellipse(100, 100, 25)
+ 
+  rotate(r2);
+   
     fill(col3);
-    ellipse(425,525, 30)
- // pop();
+    ellipse(150,150, 30)
 
-  //push()
-  
-  //rotate(r3);
-  // translate((25), (10));
+  rotate(r3);
+
     fill(col4);
-    ellipse(450,575, 35)
- // pop();
+    ellipse(200,200, 35)
 
-  //push()
-  
-  //rotate(r);
-  // translate((25), (10));
-    fill(col2);
-    ellipse(475,625, 25)
- // pop();
+  rotate(r4);
+
+    fill(col5);
+    ellipse(250,250, 25)
+ pop();
 
 x += xV
 y += yV
 r += 0.01
+r2 += 0.03
+r3 += 0.05
+r4 += 0.02
 
 
 }

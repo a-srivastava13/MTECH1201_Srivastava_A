@@ -5,6 +5,8 @@
 let spaceshipImg
 let enemies = [];
 let bullets = [];
+let score = 0;
+let startSelect = 0;
 
 function preload(){
   spaceshipImg = loadImage('spaceship.png')
@@ -18,10 +20,34 @@ function setup() {
     enemies.push(new Enemy())
   }
 
+  button = createButton("START GAME");
+  button.position((width/2 - 50), height - 150);
+  button.size(100,50);
+
+  button.mousePressed(start)
+
 }
 
 function draw() {
   background(0);
+
+   textSize(50)
+  fill(255)
+  textAlign(CENTER)
+   text("SPACESHIP", width/2, height/2)
+
+
+if (startSelect == 1){
+  background(0)
+
+  button.hide();
+
+
+  textSize(50)
+  fill(255)
+  textAlign(CENTER)
+  text("SCORE: " + score, 150, 75)
+
   spaceship.display();
   spaceship.update();
 
@@ -42,11 +68,22 @@ function draw() {
         enemies.splice(j,1);
         enemies.push(new Enemy())
         bullets.splice(i,1);
+        score += 10;
         break;
       }
     }
 
   }
+
+  fill (255)
+  textSize(50)
+  text("LIVES: " + spaceship.lives, windowWidth - 125, 75)
+
+ print(score)
+}
+  
+
+ 
 
 }
 
@@ -59,7 +96,7 @@ function keyPressed (){
 class Enemy{
   constructor(){
     this.objX = random(width)
-    this.objY = 0
+    this.objY = 100
     this.objD = random(25,50)
     this.speed = random(2,6)
 
@@ -69,6 +106,7 @@ class Enemy{
     stroke(255);
     noFill();
     ellipse(this.objX, this.objY, this.objD)
+    
 
   }
 
@@ -76,10 +114,10 @@ class Enemy{
     this.objY += this.speed;
 
     if (this.objY > height){
-      this.objY = 0;
+      this.objY = 100;
       this.objD = random(25,50);
       this.objX = random(width);
-      this.speed = random(2,6);
+      this.speed = random(2,4);
     }
   }
 
@@ -101,6 +139,7 @@ class Spaceship{
 
   this.x = this.x +random(this.shake, -this.shake);
   image(spaceshipImg, this.xL, this.yL)
+  //print(this.lives)
   }
 
   update(){
@@ -114,6 +153,7 @@ class Spaceship{
 
     }
   }
+ 
 }
 
 class Bullet{
@@ -147,4 +187,8 @@ class Bullet{
     )
   }
 
+}
+
+function start(){
+  startSelect = 1;
 }

@@ -15,6 +15,7 @@ let objY = [];
 let objD = [];
 
 let hit = false;
+ let shake=0 ;
 
 
 function preload() {
@@ -52,9 +53,17 @@ function draw() {
    background(0);
    hit = false;
 
+   shake*=0.95;
+
+  textSize(50)
+  fill(255)
+  textAlign(CENTER)
+   text("SPACESHIP", width/2, height/2)
+
   if (startSelect === 1){
     
     button.hide();
+    background(0);
 
     if (lives > 0){
     move();
@@ -105,13 +114,17 @@ function obstacle(x, y, d) {
 
   if (dist(xL, yL, x, y) < d / 2) {
     hit = true;
+    shake =5
     explodeShip(xL, yL)
+    //displaySpaceship(width/2, windowHeight - 30)
   }
 }
 
 function displaySpaceship(x, y) {
   imageMode(CENTER)
   spaceship.resize(40, 40)
+
+  x = x +random(shake, -shake);
   image(spaceship, x, y)
 }
 

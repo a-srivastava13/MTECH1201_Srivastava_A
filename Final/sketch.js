@@ -6,7 +6,13 @@ let spaceshipImg
 let enemies = [];
 let bullets = [];
 let score = 0;
+let highScore = 0;
 let startSelect = 0;
+
+let interval =2000;
+let currentMillis = 0;
+
+
 
 function preload(){
   spaceshipImg = loadImage('spaceship.png')
@@ -16,7 +22,7 @@ function setup() {
   createCanvas(windowWidth, windowHeight);
   spaceship = new Spaceship()
 
-  for (let i = 0; i < 20; i ++){
+  for (let i = 0; i < 10; i ++){
     enemies.push(new Enemy())
   }
 
@@ -26,6 +32,9 @@ function setup() {
 
   button.mousePressed(start)
 
+  gO = createGraphics(windowWidth, windowHeight)
+  gO.background = (0);
+
 }
 
 function draw() {
@@ -34,7 +43,7 @@ function draw() {
    textSize(50)
   fill(255)
   textAlign(CENTER)
-   text("SPACESHIP", width/2, height/2)
+   text("SPACESHIP 2.0", width/2, height/2)
 
 
 if (startSelect == 1){
@@ -47,6 +56,11 @@ if (startSelect == 1){
   fill(255)
   textAlign(CENTER)
   text("SCORE: " + score, 150, 75)
+
+  textSize(20)
+  fill(255)
+  textAlign(CENTER)
+  text("HIGH SCORE: " + highScore, 150, 100)
 
   spaceship.display();
   spaceship.update();
@@ -69,27 +83,60 @@ if (startSelect == 1){
         enemies.push(new Enemy())
         bullets.splice(i,1);
         score += 10;
+        if (score > highScore){
+          highScore = score
+        }
         break;
       }
-    }
 
+      else {
+        print ('miss')
+      }
+        
+    }
+  }
+}
+
+     
+
+  for (let k = 0; k < enemies.length; k ++){
+    if (dist(spaceship.xL, spaceship.yL, enemies[k].objX, enemies[k].objY) < enemies[k].objD/2){
+     if(millis()- currentMillis > interval){
+
+         //print("triggering")
+         currentMillis = millis();
+          spaceship.lives -= 1
+      }
+   
+     
+   
+   // print('triggering')
+    }
   }
 
   fill (255)
   textSize(50)
   text("LIVES: " + spaceship.lives, windowWidth - 125, 75)
 
- print(score)
+  gameOver();
+
 }
   
 
- 
 
-}
 
 function keyPressed (){
   if (key === " "){
     bullets.push(new Bullet(spaceship.xL, height - 20));
+    
+  }
+
+  if (key == 'r' || key == 'R'){
+    spaceship.lives = 3;
+    spaceship.xL = windowWidth/2
+    spaceship.yL = height - 30
+    score = 0;
+
   }
 }
 
@@ -158,8 +205,8 @@ class Spaceship{
 
 class Bullet{
   constructor(x,y){
-    this.bW = 4;
-    this.bH = 10;
+    this.bW = 3;
+    this.bH = 7;
     this.x = spaceship.xL - 2.5
     this.y = spaceship.yL - 20
     this.bSpeed = -4
@@ -167,6 +214,7 @@ class Bullet{
 
   display(){
     noStroke();
+    rectMode(CENTER)
     fill(0,255,0);
     rect(this.x, this.y, this.bW, this.bH)
   }
@@ -181,9 +229,9 @@ class Bullet{
   hits(enemy){
     return(
       this.x < enemy.objX + enemy.objD/2 &&
-      this.x + this.bW > enemy.objX &&
+      this.x + this.bW > enemy.objX/2 &&
       this.y < enemy.objY + enemy.objD/2 &&
-      this.y + this.bH > enemy.objY
+      this.y + this.bH > enemy.objY/2
     )
   }
 
@@ -191,4 +239,21 @@ class Bullet{
 
 function start(){
   startSelect = 1;
+}
+
+function endGame (){
+  startSelect = 2;
+}
+
+function gameOver() {
+  if (spaceship.lives <= 0) {
+    startSelect = 2
+    imageMode(CENTER)
+    textSize(50)
+    fill(255)
+    image(gO, windowWidth / 2, windowHeight /2)
+    textAlign(CENTER)
+    text('GAME OVER', windowWidth / 2, windowHeight / 2)
+    text('Press "R" to Restart', windowWidth / 2, (windowHeight / 2) + 50)
+  }
 }
